@@ -59,7 +59,7 @@ namespace PrimulMeuCursDeGrafica
             float[] alpha = new float[n];
             float[] dist = new float[n];
 
-            for (int i = 1; i < n; i++)
+            for (int i = 0; i < n; i++)
             {
                 alpha[i] = (float)(rnd.NextDouble() * (float)(2 * Math.PI));
                 dist[i] = (float)rnd.NextDouble() * (maxR - minR) + minR;
