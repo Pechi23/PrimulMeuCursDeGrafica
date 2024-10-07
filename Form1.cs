@@ -7,6 +7,7 @@ namespace PrimulMeuCursDeGrafica
         MyGraphics myGraphics;
         static Random rnd = new Random();
         float a = 0, b = 0;
+
         public Form1()
         {
             InitializeComponent();
@@ -15,9 +16,9 @@ namespace PrimulMeuCursDeGrafica
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            // DrawPolygon(myGraphics.grp, RegularPolygon(4, new PointF(250, 250), 150, 0));
-
             /*
+            DrawPolygon(myGraphics.grp, RegularPolygon(4, new PointF(250, 250), 150, 0));
+            
             for (float a=0; a<=(float)(Math.PI * 2); a += 0.01f)
             {
                 DrawPolygon(myGraphics.grp, RegularPolygon(4, new PointF(250, 250), 150, a));
@@ -51,47 +52,25 @@ namespace PrimulMeuCursDeGrafica
             return toReturn;
         }
 
-        //TODO: fix iregularPolygon points
         private List<PointF> IrregularPolygon(int n, PointF C, float minR, float maxR, float fi)
         {
             List<PointF> toReturn = new List<PointF>();
-            float pi2 = (float)(2 * Math.PI);
-            float[] a = new float[n + 1];
-            a[0] = 0;
-            a[n] = pi2;
+
+            float[] alpha = new float[n];
+            float[] dist = new float[n];
 
             for (int i = 1; i < n; i++)
             {
-                a[i] = (float)(rnd.NextDouble() * pi2);
+                alpha[i] = (float)(rnd.NextDouble() * (float)(2 * Math.PI));
+                dist[i] = (float)rnd.NextDouble() * (maxR - minR) + minR;
             }
 
-            for (int i = 0; i <= n; i++)
-                for (int j = i + 1; j < n; j++)
-                    if (a[i] > a[j])
-                        (a[i], a[j]) = (a[j], a[i]);
-            /*
-            StringBuilder sb = new StringBuilder();
-            for(int i=0;i<=n;i++)
-            {
-                sb.Append(a[i].ToString("0.000"));
-                sb.Append(" ");
-            }
-            textBox1.Text = sb.ToString();
-            */
-            float[] alpha = new float[n];
-            float[] d = new float[n];
-
-            alpha[0] = a[0];
-            for(int i=1; i<n; i++)
-            {
-                alpha[i] = (a[i + 1] - a[i]) + alpha[i-1];
-                d[i] = (float)rnd.NextDouble() * (maxR - minR) + minR;
-            }
+            Array.Sort(alpha);
 
             for (int i = 0; i < n; i++)
             {
-                float x = C.X + d[i] * (float)Math.Cos(i * alpha[i] + fi);
-                float y = C.Y + d[i] * (float)Math.Sin(i * alpha[i] + fi);
+                float x = C.X + dist[i] * (float)Math.Cos(alpha[i] + fi);
+                float y = C.Y + dist[i] * (float)Math.Sin(alpha[i] + fi);
                 toReturn.Add(new PointF(x, y));
                 myGraphics.grp.DrawLine(Pens.Red, x, y, C.X, C.Y);
             }
